@@ -1,0 +1,17 @@
+name: Build Tweak
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Theos
+        uses: theos/setup-theos@master
+      - name: Build Package
+        run: make package
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: IbrahimZebareTweak
+          path: packages/*.deb
