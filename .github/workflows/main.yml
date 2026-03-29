@@ -1,27 +1,28 @@
-name: Build Tweak
-on: [push, pull_request]
+#import <UIKit/UIKit.h>
 
-jobs:
-  build:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Theos
-        run: |
-          sudo git clone --recursive https://github.com/theos/theos.git /opt/theos
-          sudo chown -R $USER /opt/theos
-          echo "THEOS=/opt/theos" >> $GITHUB_ENV
-          echo "/opt/theos/bin" >> $GITHUB_PATH
-
-      - name: Build Package
-        run: |
-          export THEOS=/opt/theos
-          make package
-          
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: IbrahimZebareTweak
-          path: packages/*.deb
+%hook AppDelegate
+- (void)applicationDidFinishLaunching:(id)notification {
+    %orig;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Welcome" message:@"Modified By Ibrahim Zebare" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertController actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        
+        UIWindow *keyWindow = nil;
+        if (@available(iOS 13.0, *)) {
+            for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
+                if (scene.activationState == UISceneActivationStateForegroundActive) {
+                    for (UIWindow *window in scene.windows) {
+                        if (window.isKeyWindow) {
+                            keyWindow = window;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (!keyWindow) keyWindow = [UIApplication sharedApplication].keyWindow;
+        [keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+    });
+}
+%end
