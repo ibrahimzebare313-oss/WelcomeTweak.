@@ -1,0 +1,9 @@
+Package: com.ibrahim.welcometweak
+Name: WelcomeTweak
+Depends: mobilesubstrate
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Welcome message for Video Star
+Maintainer: Ibrahim Zebare
+Author: Ibrahim Zebare
+Section: Tweaks
